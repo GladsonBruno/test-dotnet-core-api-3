@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +12,13 @@ namespace Yeha.Api.UnitTests.Security
     /// <summary>
     /// These tests ensure that every controller that has a [AllowAnonymous] attribute is declared here to help prevent insecure controllers getting onto the code base. Security is often tinkered with during local development... and accidents happen. 
     /// </summary>
-    [TestClass]
     [AcknowledgeAllowAnonymousController(Controller = typeof(AllowAnonymousPingController))]
     [AcknowledgeAllowAnonymousController(Controller = typeof(PrimitivesController))]
     [AcknowledgeAllowAnonymousController(Controller = typeof(ProductsController))]
     [AcknowledgeAllowAnonymousController(Controller = typeof(DiagnosticsController))]
     public class AllowAnonymousControllerTests : SecurityTestBase
     {
-        [TestMethod]
-        [TestCategory("Smoke")]
+        [Fact]
         public void WhenWeLookForASpecificAllowAnonymousController_ThenWeFindIt()
         {
             var knownAllowAnonymousController = AllowAnonymousControllers
@@ -29,9 +27,7 @@ namespace Yeha.Api.UnitTests.Security
             knownAllowAnonymousController.Count().Should().Be(1, because: "we know there is at least one [AllowAnonymous] controller in the API so we are explicitly looking for it. Given we scan assemblies by convention, no matches could imply we are not scanning the assembly (not loaded into AppDomain) which is a false positive. This test helps prevent that happening. ");
         }
 
-        [TestMethod]
-        [TestCategory("Security")]
-        [TestCategory("CodingStandards")]
+        [Fact]
         public void ByConvention_EveryAllowAnonmousControllerMustBeAcknowledged()
         {
             // Arrange

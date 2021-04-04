@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
+using Xunit.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,11 @@ namespace Yeha.Api.UnitTests.Security
     /// <summary>
     /// These tests ensure that every [AllowAnonymous] method is declared here to help prevent insecure methods getting onto the code base. Security is often tinkered with during local development... and accidents happen. 
     /// </summary>
-    [TestClass]
     [AcknowledgeAllowAnonymousMethod(Controller = typeof(Controllers.PingWithAllowAnonymousMethodsController), MethodName = "Get")]
     [AcknowledgeAllowAnonymousMethod(Controller = typeof(Controllers.PingWithAllowAnonymousMethodsController), MethodName = "Delete")]
     public class AllowAnonymousMethodTests : SecurityTestBase
     {
-        [TestMethod]
-        [TestCategory("Smoke")]
+        [Fact]
         public void WhenWeLookForASpecificAllowAnonymousMethod_ThenWeFindIt()
         {
             // Arrange
@@ -31,9 +30,7 @@ namespace Yeha.Api.UnitTests.Security
             knownAllowAnonymousMethod.Count().Should().Be(1, because: "we know there is at least one AllowAnonymous method in the API so we are explicitly looking for it. Given we scan assemblies by convention, no matches could imply we are not scanning the assembly (not loaded into AppDomain) which is a false positive. This test helps prevent that happening. ");
         }
 
-        [TestMethod]
-        [TestCategory("Security")]
-        [TestCategory("CodingStandards")]
+        [Fact]
         public void ByConvention_AllowAnonymousMethodsMustBeDeclaredHere()
         {
             // Arrange

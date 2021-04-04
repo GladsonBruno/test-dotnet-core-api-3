@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,6 @@ namespace Yeha.Api.UnitTests.Security
     /// <summary>
     /// These tests ensure that every controller has a [Authorize] attribute or is declared here to help prevent insecure controllers getting onto the code base. Security is often tinkered with during local development... and accidents happen. 
     /// </summary>
-    [TestClass]
     [AcknowledgeNotAuthorizedController(Controller = typeof(ProductsController))]
     [AcknowledgeNotAuthorizedController(Controller = typeof(PrimitivesController))]
     [AcknowledgeNotAuthorizedController(Controller = typeof(AllowAnonymousPingController))]
@@ -20,8 +19,7 @@ namespace Yeha.Api.UnitTests.Security
     [AcknowledgeNotAuthorizedController(Controller = typeof(DiagnosticsController))]
     public class ControllerAuthorizeTests : SecurityTestBase
     {
-        [TestMethod]
-        [TestCategory("Smoke")]
+        [Fact]
         public void EnsureWeFindAKnownNotAuthorizedController()
         {
             // Arrange
@@ -33,25 +31,21 @@ namespace Yeha.Api.UnitTests.Security
             knownNotAuthorizedcontrollers.Count().Should().Be(1, because: "we know there is at least one non-Authorized controller in the API so we are explicitly looking for it. Given we scan assemblies by convention, no matches could imply we are not scanning the assembly (not loaded into AppDomain) which is a false positive. This test helps prevent that happening. ");
         }
 
-        [TestMethod]
-        [TestCategory("Smoke")]
+        [Fact]
         public void EnsureThereIsAtLeastOneController()
         {
             // Assert
             Controllers.Count().Should().BeGreaterThan(0, because: "there should be at least one controller defined somewhere. If not, this algorithm might not be finding the assembly. ");
         }
 
-        [TestMethod]
-        [TestCategory("Smoke")]
+        [Fact]
         public void EnsureThereIsAtLeastOneAuthorizedController()
         {
             // Assert
             AuthorizedControllers.Count().Should().BeGreaterThan(0, because: "there should be at least one controller with the [Authorize] attribute defined somewhere. If not, this algorithm might not be finding the assembly. ");
         }
 
-        [TestMethod]
-        [TestCategory("Security")]
-        [TestCategory("CodingStandards")]
+        [Fact]
         public void ByConvention_EveryControllerMustBeAuthorizedUnlessExplicitlyAcknowledgedAsInsecure()
         {
             // Arrange

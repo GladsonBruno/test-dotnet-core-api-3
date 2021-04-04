@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,6 @@ using Yeha.Api.Controllers;
 
 namespace Yeha.Api.UnitTests.Security
 {
-    [TestClass]
     public class SecurityTestBase
     {
         // We need to take a strong reference on something in the API so we can find it in the AppDomain
@@ -21,8 +20,7 @@ namespace Yeha.Api.UnitTests.Security
         protected IEnumerable<Type> AuthorizedControllers;
         protected IEnumerable<Type> AllowAnonymousControllers;
 
-        [TestInitialize]
-        public void SetupControllerSecurityTests()
+        public SecurityTestBase()
         {
             var candidateAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(assembly => !assembly.IsDynamic)
